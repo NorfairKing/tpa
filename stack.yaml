@@ -1,0 +1,5 @@
+resolver: lts-16.12
+packages:
+- tpa
+nix:
+  shell-file: shell.nix
