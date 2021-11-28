@@ -12,9 +12,15 @@ dependencies:
 library:
   source-dirs: src
   dependencies:
+  - autodocodec-yaml
+  - path
+  - path-io
+  - autodocodec
   - base32
   - bytestring
   - cryptonite
+  - envparse
+  - optparse-applicative
   - text
   - time
 

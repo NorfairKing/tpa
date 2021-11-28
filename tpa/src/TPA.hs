@@ -12,9 +12,12 @@ import Data.ByteString.Base32 as Base32
 import qualified Data.Text as T
 import Data.Time.Clock.POSIX
 import System.Exit
+import TPA.OptParse
 
 cli :: IO ()
 cli = do
+  Instructions dispatch settings <- getInstructions
+  print (dispatch, settings)
   let testKey = "BOAZML22JBYSVGAA" :: ByteString
   case decodeBase32Unpadded testKey of
     Left err -> die $ T.unpack err
