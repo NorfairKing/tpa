@@ -3,11 +3,11 @@
 with lib;
 
 let
-  cfg = config.programs.intray;
+  cfg = config.programs.tpa;
 
   toYamlFile = pkgs.callPackage ./to-yaml.nix {};
 
-  tpaPackages = (import ./pkgs.nix {}).tpaPackages;
+  tpaCli = (import ./pkgs.nix {}).tpa;
 in
 {
   options =
@@ -17,7 +17,7 @@ in
           enable = mkEnableOption "Third party authenticator";
           paths = mkOption (
             {
-              type = types.listOf types.str;
+              type = types.listOf types.path;
               default = [];
               description = "Paths to key files";
             }
@@ -32,7 +32,7 @@ in
       configFile = toYamlFile "tpa-config" tpaConfig;
     in
       mkIf cfg.enable {
-        xdg.configFile."tpa/config.yaml".source = "${intrayConfigFile}";
-        home.packages = [ tpaPackages.tpa ];
+        xdg.configFile."tpa/config.yaml".source = "${configFile}";
+        home.packages = [ tpaCli ];
       };
 }

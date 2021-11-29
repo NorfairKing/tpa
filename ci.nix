@@ -3,6 +3,7 @@ let
   pkgs = import ./nix/pkgs.nix { inherit sources; };
   pre-commit-hooks = import ./nix/pre-commit.nix { inherit sources; };
 in
-pkgs.tpaPackages // {
+{
+  inherit (pkgs) tpa;
   pre-commit-check = pre-commit-hooks.run;
 }
