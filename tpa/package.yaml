@@ -1,6 +1,6 @@
-name:                totp
+name:                tpa
 version:             0.0.0.0
-github:              "NorfairKing/totp"
+github:              "NorfairKing/tpa"
 license:             AllRightsReserved
 author:              "Tom Sydney Kerckhove"
 maintainer:          "syd@cs-syd.eu"
@@ -12,20 +12,22 @@ dependencies:
 library:
   source-dirs: src
   dependencies:
-  - autodocodec-yaml
-  - path
-  - path-io
   - autodocodec
+  - autodocodec-yaml
   - base32
   - bytestring
   - cryptonite
+  - directory
   - envparse
+  - filepath
   - optparse-applicative
+  - path
+  - path-io
   - text
   - time
 
 executables:
-  totp:
+  tpa:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -33,10 +35,10 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - totp
+    - tpa
 
 tests:
-  totp-test:
+  tpa-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
@@ -44,4 +46,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - totp
+    - tpa

@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 
-name:           totp
+name:           tpa
 version:        0.0.0.0
-homepage:       https://github.com/NorfairKing/totp#readme
-bug-reports:    https://github.com/NorfairKing/totp/issues
+homepage:       https://github.com/NorfairKing/tpa#readme
+bug-reports:    https://github.com/NorfairKing/tpa/issues
 author:         Tom Sydney Kerckhove
 maintainer:     syd@cs-syd.eu
 copyright:      Copyright (c) 2021 Tom Sydney Kerckhove
@@ -16,14 +16,15 @@ build-type:     Simple
 
 source-repository head
   type: git
-  location: https://github.com/NorfairKing/totp
+  location: https://github.com/NorfairKing/tpa
 
 library
   exposed-modules:
       TPA
+      TPA.Key
       TPA.OptParse
   other-modules:
-      Paths_totp
+      Paths_tpa
   hs-source-dirs:
       src
   build-depends:
@@ -33,7 +34,9 @@ library
     , base32
     , bytestring
     , cryptonite
+    , directory
     , envparse
+    , filepath
     , optparse-applicative
     , path
     , path-io
@@ -41,27 +44,27 @@ library
     , time
   default-language: Haskell2010
 
-executable totp
+executable tpa
   main-is: Main.hs
   other-modules:
-      Paths_totp
+      Paths_tpa
   hs-source-dirs:
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
-    , totp
+    , tpa
   default-language: Haskell2010
 
-test-suite totp-test
+test-suite tpa-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Paths_totp
+      Paths_tpa
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
-    , totp
+    , tpa
   default-language: Haskell2010
