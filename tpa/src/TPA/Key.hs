@@ -5,7 +5,6 @@ module TPA.Key where
 
 import Autodocodec
 import Control.Arrow (left)
-import Control.Monad
 import Data.ByteString
 import Data.ByteString.Base32 as Base32
 import Data.Text (Text)

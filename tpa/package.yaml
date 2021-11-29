@@ -18,7 +18,6 @@ library:
   - bytestring
   - cryptonite
   - directory
-  - envparse
   - filepath
   - optparse-applicative
   - path

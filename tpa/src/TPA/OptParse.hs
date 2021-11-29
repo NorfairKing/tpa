@@ -12,7 +12,6 @@ import Control.Applicative
 import Data.Maybe
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
-import qualified Env
 import GHC.Generics (Generic)
 import Options.Applicative as OptParse
 import qualified Options.Applicative.Help as OptParse (string)
@@ -24,9 +23,8 @@ import TPA.Key
 getSettings :: IO Settings
 getSettings = do
   flags <- getFlags
-  env <- getEnvironment
-  config <- getConfiguration flags env
-  combineToSettings flags env config
+  config <- getConfiguration flags
+  combineToSettings flags config
 
 -- | A product type for the settings that your program will use
 data Settings = Settings
@@ -35,13 +33,12 @@ data Settings = Settings
   deriving (Show, Eq, Generic)
 
 -- | Combine everything to 'Settings'
-combineToSettings :: Flags -> Environment -> Maybe Configuration -> IO Settings
-combineToSettings Flags {..} Environment {..} mConf = do
+combineToSettings :: Flags -> Maybe Configuration -> IO Settings
+combineToSettings Flags {..} mConf = do
   setKeys <-
     resolveKeys $
       concat
         [ flagPaths,
-          maybe id (:) envKeyPath (fromMaybe [] envKeyPaths),
           maybe [] configKeyPaths mConf
         ]
   pure Settings {..}
@@ -78,9 +75,9 @@ instance HasCodec Configuration where
       Configuration <$> requiredField "key-paths" "Paths to find key files. These can be both files and directories." .= configKeyPaths
 
 -- | Get the configuration
-getConfiguration :: Flags -> Environment -> IO (Maybe Configuration)
-getConfiguration Flags {..} Environment {..} =
-  case flagConfigFile <|> envConfigFile of
+getConfiguration :: Flags -> IO (Maybe Configuration)
+getConfiguration Flags {..} =
+  case flagConfigFile of
     Nothing -> defaultConfigFile >>= readYamlConfigFile
     Just cf -> do
       afp <- resolveFile' cf
@@ -94,28 +91,6 @@ defaultConfigFile :: IO (Path Abs File)
 defaultConfigFile = do
   xdgConfigDir <- getXdgDir XdgConfig (Just [reldir|tpa|])
   resolveFile xdgConfigDir "config.yaml"
-
--- | What we find in the configuration variable.
-data Environment = Environment
-  { envConfigFile :: Maybe FilePath,
-    envKeyPath :: Maybe FilePath,
-    envKeyPaths :: Maybe [FilePath]
-  }
-  deriving (Show, Eq, Generic)
-
-getEnvironment :: IO Environment
-getEnvironment = Env.parse (Env.header "Environment") environmentParser
-
--- | The 'envparse' parser for the 'Environment'
-environmentParser :: Env.Parser Env.Error Environment
-environmentParser =
-  Env.prefixed "FOO_BAR_" $
-    Environment
-      <$> Env.var (fmap Just . Env.str) "CONFIG_FILE" (mE <> Env.help "Config file")
-      <*> Env.var (fmap Just . Env.str) "PATH" (mE <> Env.help "key path")
-      <*> Env.var (fmap (Just . map (T.unpack . T.strip) . T.splitOn "," . T.pack) . Env.str) "PATHS" (mE <> Env.help "key paths, comma separated")
-  where
-    mE = Env.def Nothing <> Env.keep
 
 -- | Get the command-line flags
 getFlags :: IO Flags
@@ -139,9 +114,7 @@ flagsParser =
     -- Show the variables from the environment that we parse and the config file format
     footerStr =
       unlines
-        [ Env.helpDoc environmentParser,
-          "",
-          "Configuration file format:",
+        [ "Configuration file format:",
           T.unpack (TE.decodeUtf8 (renderColouredSchemaViaCodec @Configuration))
         ]
 
