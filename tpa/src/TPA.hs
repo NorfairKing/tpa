@@ -6,10 +6,8 @@ module TPA
   )
 where
 
-import Crypto.Hash (SHA1 (..))
-import Crypto.OTP
+import Data.List
 import qualified Data.Text as T
-import Data.Time.Clock.POSIX
 import System.Exit
 import TPA.Key
 import TPA.OptParse
@@ -17,14 +15,17 @@ import TPA.OptParse
 cli :: IO ()
 cli = do
   Settings {..} <- getSettings
-  otpTime <- getOTPTime
-  case mkTOTPParams SHA1 0 30 OTP6 TwoSteps of
-    Left err -> die err
-    Right params -> do
-      let keyLine Key {..} =
-            let otp = totp params (unSecret keySecret) otpTime
-             in unwords [show otp, T.unpack keyName]
+  now <- getOTPTime
+  case setFilter of
+    Nothing -> do
+      let keyLine k@Key {..} =
+            case otpForKey now k of
+              Left err -> unwords [T.unpack keyName <> ":", err]
+              Right otp -> unwords [show otp, T.unpack keyName]
       putStr $ unlines $ map keyLine setKeys
-
-getOTPTime :: IO OTPTime
-getOTPTime = getPOSIXTime >>= \t -> return (floor t)
+    Just nameFilter -> do
+      case find ((== nameFilter) . keyName) setKeys of
+        Nothing -> die $ "Key not found: " <> show nameFilter
+        Just k -> case otpForKey now k of
+          Left err -> die err
+          Right otp -> print otp

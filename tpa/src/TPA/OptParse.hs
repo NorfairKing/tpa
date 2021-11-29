@@ -10,6 +10,7 @@ import Autodocodec
 import Autodocodec.Yaml
 import Control.Applicative
 import Data.Maybe
+import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
 import GHC.Generics (Generic)
@@ -28,13 +29,15 @@ getSettings = do
 
 -- | A product type for the settings that your program will use
 data Settings = Settings
-  { setKeys :: [Key]
+  { setFilter :: Maybe Text,
+    setKeys :: [Key]
   }
   deriving (Show, Eq, Generic)
 
 -- | Combine everything to 'Settings'
 combineToSettings :: Flags -> Maybe Configuration -> IO Settings
 combineToSettings Flags {..} mConf = do
+  let setFilter = flagFilter
   setKeys <-
     resolveKeys $
       concat
@@ -121,6 +124,7 @@ flagsParser =
 -- | The flags that are common across commands.
 data Flags = Flags
   { flagConfigFile :: Maybe FilePath,
+    flagFilter :: Maybe Text,
     flagPaths :: [FilePath]
   }
   deriving (Show, Eq, Generic)
@@ -135,6 +139,13 @@ parseFlags =
               [ long "config-file",
                 help "Path to an altenative config file",
                 metavar "FILEPATH"
+              ]
+          )
+      )
+    <*> optional
+      ( strArgument
+          ( mconcat
+              [ help "the key to show"
               ]
           )
       )
