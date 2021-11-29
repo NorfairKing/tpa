@@ -8,8 +8,6 @@ where
 
 import Crypto.Hash (SHA1 (..))
 import Crypto.OTP
-import Data.ByteString (ByteString)
-import Data.ByteString.Base32 as Base32
 import qualified Data.Text as T
 import Data.Time.Clock.POSIX
 import System.Exit
@@ -25,7 +23,7 @@ cli = do
     Right params -> do
       let keyLine Key {..} =
             let otp = totp params (unSecret keySecret) otpTime
-             in concat [T.unpack keyName, ": ", show otp]
+             in unwords [show otp, T.unpack keyName]
       putStr $ unlines $ map keyLine setKeys
 
 getOTPTime :: IO OTPTime

@@ -45,9 +45,6 @@ combineToSettings Flags {..} Environment {..} mConf = do
           maybe [] configKeyPaths mConf
         ]
   pure Settings {..}
-  where
-    mc :: (Configuration -> Maybe a) -> Maybe a
-    mc f = mConf >>= f
 
 resolveKeys :: [FilePath] -> IO [Key]
 resolveKeys = fmap concat . mapM go

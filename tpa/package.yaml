@@ -36,14 +36,3 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - tpa
-
-tests:
-  tpa-test:
-    main:                Spec.hs
-    source-dirs:         test
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - tpa
