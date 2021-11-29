@@ -6,16 +6,11 @@
 
 module TPA.OptParse where
 
-import Autodocodec
-import Autodocodec.Yaml
 import Control.Applicative
-import Data.Maybe
 import Data.Text (Text)
-import qualified Data.Text as T
-import qualified Data.Text.Encoding as TE
+import Data.Yaml as Yaml
 import GHC.Generics (Generic)
 import Options.Applicative as OptParse
-import qualified Options.Applicative.Help as OptParse (string)
 import Path
 import Path.IO hiding (doesFileExist)
 import System.Directory (doesDirectoryExist, doesFileExist)
@@ -28,10 +23,11 @@ getSettings = do
   combineToSettings flags config
 
 -- | A product type for the settings that your program will use
-data Settings = Settings
-  { setFilter :: Maybe Text,
-    setKeys :: [Key]
-  }
+data Settings
+  = Settings
+      { setFilter :: Maybe Text,
+        setKeys :: [Key]
+      }
   deriving (Show, Eq, Generic)
 
 -- | Combine everything to 'Settings'
@@ -65,26 +61,27 @@ resolveKeys = fmap concat . mapM go
       let rightExtension af = fileExtension af == Just ".password"
       concat <$> mapM goFile (filter rightExtension files)
     goFile :: Path Abs File -> IO [Key]
-    goFile af = fromMaybe [] <$> readYamlConfigFile af
+    goFile = Yaml.decodeFileThrow . fromAbsFile
 
-data Configuration = Configuration
-  { configKeyPaths :: [FilePath]
-  }
+data Configuration
+  = Configuration
+      { configKeyPaths :: [FilePath]
+      }
   deriving (Show, Eq, Generic)
 
-instance HasCodec Configuration where
-  codec =
-    object "Configuration" $
-      Configuration <$> requiredField "key-paths" "Paths to find key files. These can be both files and directories." .= configKeyPaths
+instance FromJSON Configuration where
+  parseJSON = withObject "Configuration" $ \o ->
+    Configuration
+      <$> o .:? "key-paths" .!= []
 
 -- | Get the configuration
 getConfiguration :: Flags -> IO (Maybe Configuration)
 getConfiguration Flags {..} =
   case flagConfigFile of
-    Nothing -> defaultConfigFile >>= readYamlConfigFile
+    Nothing -> defaultConfigFile >>= forgivingAbsence . decodeFileThrow . fromAbsFile
     Just cf -> do
       afp <- resolveFile' cf
-      readYamlConfigFile afp
+      Just <$> decodeFileThrow (fromAbsFile afp)
 
 -- | Where to get the configuration file by default.
 --
@@ -112,21 +109,15 @@ flagsParser :: OptParse.ParserInfo Flags
 flagsParser =
   OptParse.info
     (OptParse.helper <*> parseFlags)
-    (OptParse.fullDesc <> OptParse.footerDoc (Just $ OptParse.string footerStr))
-  where
-    -- Show the variables from the environment that we parse and the config file format
-    footerStr =
-      unlines
-        [ "Configuration file format:",
-          T.unpack (TE.decodeUtf8 (renderColouredSchemaViaCodec @Configuration))
-        ]
+    OptParse.fullDesc
 
 -- | The flags that are common across commands.
-data Flags = Flags
-  { flagConfigFile :: Maybe FilePath,
-    flagFilter :: Maybe Text,
-    flagPaths :: [FilePath]
-  }
+data Flags
+  = Flags
+      { flagConfigFile :: Maybe FilePath,
+        flagFilter :: Maybe Text,
+        flagPaths :: [FilePath]
+      }
   deriving (Show, Eq, Generic)
 
 -- | The 'optparse-applicative' parser for the 'Flags'.

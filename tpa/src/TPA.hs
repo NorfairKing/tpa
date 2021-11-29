@@ -23,7 +23,7 @@ cli = do
               Left err -> unwords [T.unpack keyName <> ":", err]
               Right otp -> unwords [show otp, T.unpack keyName]
       putStr $ unlines $ map keyLine setKeys
-    Just nameFilter -> do
+    Just nameFilter ->
       case find ((== nameFilter) . keyName) setKeys of
         Nothing -> die $ "Key not found: " <> show nameFilter
         Just k -> case otpForKey now k of

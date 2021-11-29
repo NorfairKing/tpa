@@ -12,8 +12,6 @@ dependencies:
 library:
   source-dirs: src
   dependencies:
-  - autodocodec
-  - autodocodec-yaml
   - base32
   - bytestring
   - cryptonite
@@ -24,14 +22,11 @@ library:
   - path-io
   - text
   - time
+  - yaml
 
 executables:
   tpa:
     main:                Main.hs
     source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
     dependencies:
     - tpa
