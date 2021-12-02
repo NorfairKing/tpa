@@ -18,7 +18,7 @@ cli = do
   now <- getOTPTime
   let filterFunc = case setFilter of
         Nothing -> id
-        Just nameFilter -> filter ((nameFilter `T.isInfixOf`) . keyName)
+        Just nameFilter -> filter ((T.toCaseFold nameFilter `T.isInfixOf`) . T.toCaseFold . keyName)
   let filteredResults = filterFunc $ sortOn keyName setKeys
   case filteredResults of
     [] -> die "No keys found."
