@@ -5,9 +5,9 @@ with lib;
 let
   cfg = config.programs.tpa;
 
-  toYamlFile = pkgs.callPackage ./to-yaml.nix {};
+  toYamlFile = pkgs.callPackage ./to-yaml.nix { };
 
-  tpaCli = (import ./pkgs.nix {}).tpa;
+  tpaCli = pkgs.haskell.lib.justStaticExecutables (import ./pkgs.nix { }).tpa;
 in
 {
   options =
@@ -18,7 +18,7 @@ in
           paths = mkOption (
             {
               type = types.listOf types.path;
-              default = [];
+              default = [ ];
               description = "Paths to key files";
             }
           );
@@ -31,8 +31,8 @@ in
       };
       configFile = toYamlFile "tpa-config" tpaConfig;
     in
-      mkIf cfg.enable {
-        xdg.configFile."tpa/config.yaml".source = "${configFile}";
-        home.packages = [ tpaCli ];
-      };
+    mkIf cfg.enable {
+      xdg.configFile."tpa/config.yaml".source = "${configFile}";
+      home.packages = [ tpaCli ];
+    };
 }

@@ -24,27 +24,27 @@
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs": {
-        "branch": "nixos-20.09",
+        "branch": "nixos-21.11",
         "description": "Nix Packages collection",
         "homepage": "",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "1c1f5649bb9c1b0d98637c8c365228f57126f361",
-        "sha256": "0f2nvdijyxfgl5kwyb4465pppd5vkhqxddx6v40k2s0z9jfhj0xl",
+        "rev": "86453059bf8312f0f5bf1fe8a2f52da2be664489",
+        "sha256": "0inzy97dp5988cwjwpn41219rir4c7qp7wwg7v4abcs9lypg8is4",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/1c1f5649bb9c1b0d98637c8c365228f57126f361.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/86453059bf8312f0f5bf1fe8a2f52da2be664489.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "pre-commit-hooks": {
         "branch": "master",
         "description": "Seamless integration of https://pre-commit.com git hooks with Nix.",
         "homepage": "",
-        "owner": "hercules-ci",
+        "owner": "cachix",
         "repo": "pre-commit-hooks.nix",
-        "rev": "77dd75709bbf33e2fc769dae08bab04a61ae409c",
-        "sha256": "0p60mc6a5fv7kplqciq1m0ql8azhx5xbxvc0n67jdw4j33n9a496",
+        "rev": "ff9c0b459ddc4b79c06e19d44251daa8e9cd1746",
+        "sha256": "0z09ndxvbk6w4j28lzgj0b9qqcbwrvr58c0xsm0rf0xsdipi0nwf",
         "type": "tarball",
-        "url": "https://github.com/hercules-ci/pre-commit-hooks.nix/archive/77dd75709bbf33e2fc769dae08bab04a61ae409c.tar.gz",
+        "url": "https://github.com/cachix/pre-commit-hooks.nix/archive/ff9c0b459ddc4b79c06e19d44251daa8e9cd1746.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }

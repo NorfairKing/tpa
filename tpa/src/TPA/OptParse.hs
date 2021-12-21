@@ -23,11 +23,10 @@ getSettings = do
   combineToSettings flags config
 
 -- | A product type for the settings that your program will use
-data Settings
-  = Settings
-      { setFilter :: Maybe Text,
-        setKeys :: [Key]
-      }
+data Settings = Settings
+  { setFilter :: !(Maybe Text),
+    setKeys :: ![Key]
+  }
   deriving (Show, Eq, Generic)
 
 -- | Combine everything to 'Settings'
@@ -63,10 +62,9 @@ resolveKeys = fmap concat . mapM go
     goFile :: Path Abs File -> IO [Key]
     goFile = Yaml.decodeFileThrow . fromAbsFile
 
-data Configuration
-  = Configuration
-      { configKeyPaths :: [FilePath]
-      }
+data Configuration = Configuration
+  { configKeyPaths :: ![FilePath]
+  }
   deriving (Show, Eq, Generic)
 
 instance FromJSON Configuration where
@@ -112,12 +110,11 @@ flagsParser =
     OptParse.fullDesc
 
 -- | The flags that are common across commands.
-data Flags
-  = Flags
-      { flagConfigFile :: Maybe FilePath,
-        flagFilter :: Maybe Text,
-        flagPaths :: [FilePath]
-      }
+data Flags = Flags
+  { flagConfigFile :: !(Maybe FilePath),
+    flagFilter :: !(Maybe Text),
+    flagPaths :: ![FilePath]
+  }
   deriving (Show, Eq, Generic)
 
 -- | The 'optparse-applicative' parser for the 'Flags'.

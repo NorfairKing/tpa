@@ -6,7 +6,7 @@ in
 pkgs.haskell.lib.buildStackProject {
   name = "tpa-shell";
   buildInputs = with pkgs; [
-    (import sources.niv {}).niv
+    (import sources.niv { inherit pkgs; }).niv
     zlib
   ] ++ pre-commit.tools;
   shellHook = pre-commit.run.shellHook;
