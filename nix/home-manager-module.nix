@@ -27,7 +27,7 @@ in
   config =
     let
       tpaConfig = {
-        "key-paths" = cfg.paths;
+        "key-paths" = map builtins.toString cfg.paths;
       };
       configFile = toYamlFile "tpa-config" tpaConfig;
     in
