@@ -1,5 +1,7 @@
-resolver: lts-18.16
+resolver: lts-19.6
 packages:
 - tpa
+system-ghc: true
 nix:
-  shell-file: shell.nix
+  enable: true
+with-hpack: hpack

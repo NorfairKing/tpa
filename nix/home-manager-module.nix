@@ -1,3 +1,4 @@
+{ tpa }:
 { lib, pkgs, config, ... }:
 
 with lib;
@@ -5,9 +6,6 @@ with lib;
 let
   cfg = config.programs.tpa;
 
-  toYamlFile = pkgs.callPackage ./to-yaml.nix { };
-
-  tpaCli = pkgs.haskell.lib.justStaticExecutables (import ./pkgs.nix { }).tpa;
 in
 {
   options =
@@ -29,10 +27,10 @@ in
       tpaConfig = {
         "key-paths" = map builtins.toString cfg.paths;
       };
-      configFile = toYamlFile "tpa-config" tpaConfig;
+      configFile = (pkgs.formats.yaml { }).generate "tpa-config.yaml" tpaConfig;
     in
     mkIf cfg.enable {
       xdg.configFile."tpa/config.yaml".source = "${configFile}";
-      home.packages = [ tpaCli ];
+      home.packages = [ tpa ];
     };
 }
