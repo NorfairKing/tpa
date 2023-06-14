@@ -7,7 +7,7 @@ with final.haskell.lib;
     overrides = composeExtensions (old.overrides or (_: _: { })) (
       self: super:
         {
-          "tpa" = generateOptparseApplicativeCompletion "tpa" (buildStrictly (self.callPackage ../tpa { }));
+          "tpa" = self.generateOptparseApplicativeCompletions [ "tpa" ] (buildStrictly (self.callPackage ../tpa { }));
         }
     );
   }
