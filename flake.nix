@@ -47,9 +47,7 @@
       };
       devShells.${system}.default = pkgs.haskellPackages.shellFor {
         name = "tpa-shell";
-        packages = (p:
-          [ p.tpa ]
-        );
+        packages = p: [ p.tpa ];
         withHoogle = true;
         doBenchmark = true;
         buildInputs = (with pkgs; [
