@@ -4,6 +4,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-23.11";
     home-manager.url = "github:nix-community/home-manager?ref=release-23.11";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    weeder-nix.url = "github:NorfairKing/weeder-nix";
+    weeder-nix.flake = false;
   };
 
   outputs =
@@ -11,6 +13,7 @@
     , nixpkgs
     , home-manager
     , pre-commit-hooks
+    , weeder-nix
     }:
     let
       system = "x86_64-linux";
@@ -19,6 +22,7 @@
         config.allowUnfree = true;
         overlays = [
           self.overlays.${system}
+          (import (weeder-nix + "/nix/overlay.nix"))
         ];
       };
       pkgs = pkgsFor nixpkgs;
@@ -32,6 +36,10 @@
           inherit pkgs;
           home-manager = home-manager.nixosModules.home-manager;
           tpa-home-manager-module = self.homeManagerModules.${system}.default;
+        };
+        weeder-check = pkgs.weeder-nix.makeWeederCheck {
+          weederToml = ./weeder.toml;
+          packages = [ "tpa" ];
         };
         pre-commit = pre-commit-hooks.lib.${system}.run {
           src = ./.;

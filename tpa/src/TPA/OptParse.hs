@@ -1,4 +1,3 @@
-{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE RecordWildCards #-}
@@ -9,7 +8,6 @@ module TPA.OptParse where
 import Control.Applicative
 import Data.Text (Text)
 import Data.Yaml as Yaml
-import GHC.Generics (Generic)
 import Options.Applicative as OptParse
 import Path
 import Path.IO hiding (doesFileExist)
@@ -27,7 +25,6 @@ data Settings = Settings
   { setFilter :: !(Maybe Text),
     setKeys :: ![Key]
   }
-  deriving (Show, Eq, Generic)
 
 -- | Combine everything to 'Settings'
 combineToSettings :: Flags -> Maybe Configuration -> IO Settings
@@ -65,7 +62,6 @@ resolveKeys = fmap concat . mapM go
 data Configuration = Configuration
   { configKeyPaths :: ![FilePath]
   }
-  deriving (Show, Eq, Generic)
 
 instance FromJSON Configuration where
   parseJSON = withObject "Configuration" $ \o ->
@@ -115,7 +111,6 @@ data Flags = Flags
     flagFilter :: !(Maybe Text),
     flagPaths :: ![FilePath]
   }
-  deriving (Show, Eq, Generic)
 
 -- | The 'optparse-applicative' parser for the 'Flags'.
 parseFlags :: OptParse.Parser Flags

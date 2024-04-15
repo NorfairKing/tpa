@@ -1,4 +1,3 @@
-{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 
@@ -13,14 +12,12 @@ import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
 import Data.Time.Clock.POSIX (getPOSIXTime)
 import Data.Yaml
-import GHC.Generics (Generic)
 import Text.Printf
 
 data Key = Key
   { keyName :: !Text,
     keySecret :: !Secret
   }
-  deriving (Show, Eq, Generic)
 
 instance FromJSON Key where
   parseJSON = withObject "Key" $ \o ->
@@ -52,7 +49,6 @@ getOTPTime :: IO OTPTime
 getOTPTime = floor <$> getPOSIXTime
 
 newtype Secret = Secret {unSecret :: ByteString}
-  deriving (Show, Eq, Generic)
 
 instance FromJSON Secret where
   parseJSON = withText "Secret" $ \t ->
