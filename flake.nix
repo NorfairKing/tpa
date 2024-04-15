@@ -17,7 +17,7 @@
     }:
     let
       system = "x86_64-linux";
-      pkgsFor = nixpkgs: import nixpkgs {
+      pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
         overlays = [
@@ -25,12 +25,15 @@
           (import (weeder-nix + "/nix/overlay.nix"))
         ];
       };
-      pkgs = pkgsFor nixpkgs;
+      pkgsMusl = pkgs.pkgsMusl;
 
     in
     {
       overlays.${system} = import ./nix/overlay.nix;
-      packages.${system}.default = pkgs.tpa;
+      packages.${system} = {
+        default = pkgs.tpa;
+        static = pkgsMusl.tpa;
+      };
       checks.${system} = {
         nixos-module-test = import ./nix/nixos-module-test.nix {
           inherit pkgs;
@@ -71,6 +74,6 @@
           ]);
         shellHook = self.checks.${system}.pre-commit.shellHook;
       };
-      homeManagerModules.${system}.default = import ./nix/home-manager-module.nix { tpa = pkgs.tpa; };
+      homeManagerModules.${system}.default = import ./nix/home-manager-module.nix { tpa = self.packages.${system}.static; };
     };
 }
