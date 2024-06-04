@@ -6,6 +6,12 @@
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     weeder-nix.url = "github:NorfairKing/weeder-nix";
     weeder-nix.flake = false;
+    safe-coloured-text.url = "github:NorfairKing/safe-coloured-text";
+    safe-coloured-text.flake = false;
+    autodocodec.url = "github:NorfairKing/autodocodec";
+    autodocodec.flake = false;
+    opt-env-conf.url = "github:NorfairKing/opt-env-conf";
+    opt-env-conf.flake = false;
   };
 
   outputs =
@@ -14,6 +20,9 @@
     , home-manager
     , pre-commit-hooks
     , weeder-nix
+    , safe-coloured-text
+    , autodocodec
+    , opt-env-conf
     }:
     let
       system = "x86_64-linux";
@@ -23,6 +32,9 @@
         overlays = [
           self.overlays.${system}
           (import (weeder-nix + "/nix/overlay.nix"))
+          (import (safe-coloured-text + "/nix/overlay.nix"))
+          (import (autodocodec + "/nix/overlay.nix"))
+          (import (opt-env-conf + "/nix/overlay.nix"))
         ];
       };
       pkgsMusl = pkgs.pkgsMusl;

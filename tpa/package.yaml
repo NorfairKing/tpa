@@ -12,12 +12,13 @@ dependencies:
 library:
   source-dirs: src
   dependencies:
+  - autodocodec
   - base32
   - bytestring
   - cryptonite
   - directory
   - filepath
-  - optparse-applicative
+  - opt-env-conf
   - path
   - path-io
   - text
