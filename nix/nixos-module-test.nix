@@ -7,13 +7,13 @@ pkgs.nixosTest (
     name = "tpa-module-test";
     nodes.machine = {
       imports = [ home-manager ];
-      system.stateVersion = "23.05";
+      system.stateVersion = "24.05";
       users.users.testuser.isNormalUser = true;
       home-manager = {
         useGlobalPkgs = true;
         users.testuser = { pkgs, ... }: {
           imports = [ tpa-home-manager-module ];
-          home.stateVersion = "23.05";
+          home.stateVersion = "24.05";
           xdg.enable = true;
           programs.tpa = {
             enable = true;
