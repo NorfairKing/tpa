@@ -1,5 +1,5 @@
-{ mkDerivation, base, base32, bytestring, cryptonite, directory
-, filepath, lib, optparse-applicative, path, path-io, text, time
+{ mkDerivation, autodocodec, base, base32, bytestring, cryptonite
+, directory, filepath, lib, opt-env-conf, path, path-io, text, time
 , yaml
 }:
 mkDerivation {
@@ -9,8 +9,8 @@ mkDerivation {
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    base base32 bytestring cryptonite directory filepath
-    optparse-applicative path path-io text time yaml
+    autodocodec base base32 bytestring cryptonite directory filepath
+    opt-env-conf path path-io text time yaml
   ];
   executableHaskellDepends = [ base ];
   homepage = "https://github.com/NorfairKing/tpa#readme";

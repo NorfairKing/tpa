@@ -28,13 +28,14 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      autodocodec
+    , base >=4.7 && <5
     , base32
     , bytestring
     , cryptonite
     , directory
     , filepath
-    , optparse-applicative
+    , opt-env-conf
     , path
     , path-io
     , text

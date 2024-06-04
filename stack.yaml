@@ -1,6 +1,8 @@
 resolver: lts-22.22
 packages:
 - tpa
+- /home/syd/src/opt-env-conf/opt-env-conf
+- /home/syd/src/safe-coloured-text/safe-coloured-text
 system-ghc: true
 nix:
   enable: false
