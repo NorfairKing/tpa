@@ -1,7 +1,6 @@
 resolver: lts-22.22
 packages:
 - tpa
-- /home/syd/src/opt-env-conf/opt-env-conf
 
 ghc-options:
   "$locals": -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wpartial-fields -Widentities -Wredundant-constraints -Wcpp-undef
@@ -19,6 +18,11 @@ extra-deps:
     - autodocodec
     - autodocodec-yaml
     - autodocodec-schema
+- github: NorfairKing/opt-env-conf
+  commit: 0f3d914b16551e88c1cc60060121c3da747c0a38
+  subdirs:
+    - opt-env-conf
+    - opt-env-conf-test
 
 system-ghc: true
 nix:

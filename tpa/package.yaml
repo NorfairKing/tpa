@@ -4,7 +4,10 @@ github: "NorfairKing/tpa"
 license: AllRightsReserved
 author: "Tom Sydney Kerckhove"
 maintainer: "syd@cs-syd.eu"
-copyright: "Copyright (c) 2021-2022 Tom Sydney Kerckhove"
+copyright: "Copyright (c) 2021-2024 Tom Sydney Kerckhove"
+
+extra-source-files:
+- test_resources/**/*
 
 dependencies:
 - base >= 4.7 && < 5
@@ -30,4 +33,19 @@ executables:
     main:                Main.hs
     source-dirs:         app
     dependencies:
+    - tpa
+
+tests:
+  tpa-test:
+    main: Spec.hs
+    source-dirs: test/
+    build-tools: sydtest-discover
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -Wall
+    dependencies:
+    - opt-env-conf-test
+    - sydtest
     - tpa
