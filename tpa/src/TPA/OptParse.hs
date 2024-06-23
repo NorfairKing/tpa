@@ -14,51 +14,50 @@ import Data.Yaml as Yaml (decodeFileThrow)
 import OptEnvConf
 import Path
 import Path.IO hiding (doesFileExist)
+import Paths_tpa (version)
 import System.Directory (doesDirectoryExist, doesFileExist)
 import TPA.Key
 
 getSettings :: IO Settings
-getSettings = runParser $ do
-  let configFileParser =
-        optionalFirst
-          [ optional $
-              strOption
-                [ long "config-file",
-                  help "Configuration file path"
-                ],
-            optional $
-              envVar
-                str
-                [ var "CONFIG_FILE",
-                  help "Configuration file path"
-                ],
-            optional $ xdgYamlConfigFile "tpa"
-          ]
-  withYamlConfig configFileParser $ do
-    setFilter <-
-      optional $
-        strArgument
-          [ metavar "QUERY",
-            help "Query for the name of the keys to show"
-          ]
-    setKeys <- mapIO resolveKeys $ do
-      flagPaths <-
-        many $
-          strOption
-            [ long "path",
-              help "Path to key files, either files or directories",
-              metavar "PATH"
-            ]
-
-      configPaths <- confVal "keys-paths" :: Parser [FilePath]
-      pure $ flagPaths ++ configPaths
-    pure Settings {..}
+getSettings = runSettingsParser version
 
 -- | A product type for the settings that your program will use
 data Settings = Settings
   { setFilter :: !(Maybe Text),
     setKeys :: ![Key]
   }
+
+instance HasParser Settings where
+  settingsParser =
+    withConfigurableYamlConfig (xdgYamlConfigFile "tpa") $ do
+      setFilter <-
+        optional $
+          setting
+            [ help "Query for the name of the keys to show",
+              reader str,
+              argument,
+              metavar "QUERY"
+            ]
+      setKeys <- mapIO resolveKeys $ do
+        flagPaths <-
+          many $
+            setting
+              [ help "Path to key files, either files or directories",
+                reader str,
+                option,
+                long "path",
+                metavar "PATH"
+              ]
+
+        configPaths <-
+          setting
+            [ help "keys paths",
+              conf "keys-paths",
+              value []
+            ] ::
+            Parser [FilePath]
+        pure $ flagPaths ++ configPaths
+      pure Settings {..}
 
 resolveKeys :: [FilePath] -> IO [Key]
 resolveKeys = fmap concat . mapM go
