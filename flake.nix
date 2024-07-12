@@ -10,7 +10,7 @@
     safe-coloured-text.flake = false;
     autodocodec.url = "github:NorfairKing/autodocodec";
     autodocodec.flake = false;
-    opt-env-conf.url = "github:NorfairKing/opt-env-conf";
+    opt-env-conf.url = "github:NorfairKing/opt-env-conf/development";
     opt-env-conf.flake = false;
   };
 

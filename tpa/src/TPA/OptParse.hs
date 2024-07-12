@@ -19,7 +19,7 @@ import System.Directory (doesDirectoryExist, doesFileExist)
 import TPA.Key
 
 getSettings :: IO Settings
-getSettings = runSettingsParser version
+getSettings = runSettingsParser version "Third party authenticator"
 
 data Settings = Settings
   { setFilter :: !(Maybe Text),

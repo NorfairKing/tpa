@@ -1,25 +1,24 @@
 resolver: lts-22.22
 packages:
 - tpa
-
 ghc-options:
   "$locals": -Wall -Wincomplete-uni-patterns -Wincomplete-record-updates -Wpartial-fields -Widentities -Wredundant-constraints -Wcpp-undef
 
 extra-deps:
 - github: NorfairKing/safe-coloured-text
-  commit: 61f14d21b7399fe97da24e484c2f9fedaf532bb8
+  commit: a58b782acc873a40a0eeb20eb4dc22c6df9c9dee
   subdirs:
   - safe-coloured-text
   - safe-coloured-text-layout
   - safe-coloured-text-gen
 - github: NorfairKing/autodocodec
-  commit: a818df53b0f65caf3615d5cb9d4734288ff1ca39
+  commit: 36779707f38ec3aeb0a591ff8043a63717c96ea2
   subdirs:
     - autodocodec
     - autodocodec-yaml
     - autodocodec-schema
 - github: NorfairKing/opt-env-conf
-  commit: 0f3d914b16551e88c1cc60060121c3da747c0a38
+  commit: f2d506710f5921fb10de859703e6226139d5d0f2
   subdirs:
     - opt-env-conf
     - opt-env-conf-test

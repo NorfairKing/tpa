@@ -1,9 +1,9 @@
-[36mUsage: [m[33mtpa[m [37m--config-file[m [33mFILE[m [33mQUERY[m [37m--path[m [33mPATH[m
+[36mUsage: [m[33mtpa[m [37m--config-file[m [33mFILE_PATH[m [33mQUERY[m [37m--path[m [33mPATH[m
 
 [36mAll settings[m:
   [34mPath to the configuration file[m
-  option: [37m--config-file[m [33mFILE[m
-  env: [37mCONFIG_FILE[m [33mFILE[m
+  option: [37m--config-file[m [33mFILE_PATH[m
+  env: [37mCONFIG_FILE[m [33mFILE_PATH[m
   
   [34mQuery for the name of the keys to show[m
   argument: [33mQUERY[m
@@ -12,7 +12,9 @@
   option: [37m--path[m [33mPATH[m
   
   [34mkey paths[m
-  config: [37mkey-paths[m: - [33m<string>[m
+  config:
+    [37mkey-paths[m: # [32mor null[m
+      - [33m<string>[m
   
 
 [36mOptions[m:
@@ -21,9 +23,11 @@
   [37m--path[m        [34mPath to key files, either files or directories[m 
 
 [36mEnvironment Variables[m:
-  [37mCONFIG_FILE[m [33mFILE[m   [34mPath to the configuration file[m
+  [37mCONFIG_FILE[m [33mFILE_PATH[m   [34mPath to the configuration file[m
 
 [36mConfiguration Values[m:
   [34mkey paths[m
-  [37mkey-paths[m: - [33m<string>[m
+  [37mkey-paths[m:
+    # [32mor null[m
+    - [33m<string>[m
 
