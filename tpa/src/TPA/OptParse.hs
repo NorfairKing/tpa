@@ -23,7 +23,8 @@ getSettings = runSettingsParser version "Third party authenticator"
 
 data Settings = Settings
   { setFilter :: !(Maybe Text),
-    setKeys :: ![Key]
+    setKeys :: ![Key],
+    setWatch :: !Bool
   }
 
 instance HasParser Settings where
@@ -56,6 +57,20 @@ instance HasParser Settings where
             ] ::
             Parser [FilePath]
         pure $ flagPaths ++ configPaths
+      setWatch <-
+        let h = help "Watch codes until tpa is stopped"
+         in choice
+              [ setting
+                  [ h,
+                    switch True,
+                    short 'w'
+                  ],
+                yesNoSwitch
+                  False
+                  [ h,
+                    long "watch"
+                  ]
+              ]
       pure Settings {..}
 
 resolveKeys :: [FilePath] -> IO [Key]
