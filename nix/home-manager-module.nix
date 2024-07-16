@@ -1,5 +1,11 @@
-{ tpa }:
-{ lib, pkgs, config, ... }:
+{ tpa
+, opt-env-conf
+}:
+{ lib
+, pkgs
+, config
+, ...
+}:
 
 with lib;
 
@@ -8,29 +14,35 @@ let
 
 in
 {
-  options =
-    {
-      programs.tpa =
-        {
-          enable = mkEnableOption "Third party authenticator";
-          paths = mkOption (
-            {
-              type = types.listOf types.path;
-              default = [ ];
-              description = "Paths to key files";
-            }
-          );
-        };
+  options = {
+    programs.tpa = {
+      enable = mkEnableOption "Third party authenticator";
+      paths = mkOption ({
+        type = types.listOf types.path;
+        default = [ ];
+        description = "Paths to key files";
+      });
     };
+  };
   config =
     let
       tpaConfig = {
         "key-paths" = map builtins.toString cfg.paths;
       };
       configFile = (pkgs.formats.yaml { }).generate "tpa-config.yaml" tpaConfig;
+      settingsCheck = opt-env-conf.mkSettingsCheck
+        "tpa-settings-check"
+        "${tpa}/bin/tpa"
+        [ "--config-file" "${configFile}" ]
+        { };
+      configuredTpa = tpa.overrideAttrs (old: {
+        checkPhase = (old.checkPhase or "") + ''
+          echo ${settingsCheck}
+        '';
+      });
     in
     mkIf cfg.enable {
       xdg.configFile."tpa/config.yaml".source = "${configFile}";
-      home.packages = [ tpa ];
+      home.packages = [ configuredTpa ];
     };
 }

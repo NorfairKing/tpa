@@ -28,50 +28,49 @@ data Settings = Settings
   }
 
 instance HasParser Settings where
-  settingsParser =
-    withConfigurableYamlConfig (xdgYamlConfigFile "tpa") $ do
-      setFilter <-
-        optional $
+  settingsParser = subEnv_ "tpa" $ withConfigurableYamlConfig (xdgYamlConfigFile "tpa") $ do
+    setFilter <-
+      optional $
+        setting
+          [ help "Query for the name of the keys to show",
+            reader str,
+            argument,
+            metavar "QUERY"
+          ]
+    setKeys <- mapIO resolveKeys $ do
+      flagPaths <-
+        many $
           setting
-            [ help "Query for the name of the keys to show",
+            [ help "Path to key files, either files or directories",
               reader str,
-              argument,
-              metavar "QUERY"
+              option,
+              long "path",
+              metavar "PATH"
             ]
-      setKeys <- mapIO resolveKeys $ do
-        flagPaths <-
-          many $
-            setting
-              [ help "Path to key files, either files or directories",
-                reader str,
-                option,
-                long "path",
-                metavar "PATH"
-              ]
 
-        configPaths <-
-          setting
-            [ help "key paths",
-              conf "key-paths",
-              value []
-            ] ::
-            Parser [FilePath]
-        pure $ flagPaths ++ configPaths
-      setWatch <-
-        let h = help "Watch codes until tpa is stopped"
-         in choice
-              [ setting
-                  [ h,
-                    switch True,
-                    short 'w'
-                  ],
-                yesNoSwitch
-                  False
-                  [ h,
-                    long "watch"
-                  ]
-              ]
-      pure Settings {..}
+      configPaths <-
+        setting
+          [ help "key paths",
+            conf "key-paths",
+            value []
+          ] ::
+          Parser [FilePath]
+      pure $ flagPaths ++ configPaths
+    setWatch <-
+      let h = help "Watch codes until tpa is stopped"
+       in choice
+            [ setting
+                [ h,
+                  switch True,
+                  short 'w'
+                ],
+              yesNoSwitch
+                False
+                [ h,
+                  long "watch"
+                ]
+            ]
+    pure Settings {..}
 
 resolveKeys :: [FilePath] -> IO [Key]
 resolveKeys = fmap concat . mapM go

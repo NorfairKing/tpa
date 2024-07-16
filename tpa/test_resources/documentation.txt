@@ -3,7 +3,7 @@
 [36mAll settings[m:
   [34mPath to the configuration file[m
   option: [37m--config-file[m [33mFILE_PATH[m
-  env: [37mCONFIG_FILE[m [33mFILE_PATH[m
+  env: [37mTPA_CONFIG_FILE[m [33mFILE_PATH[m
   
   [34mQuery for the name of the keys to show[m
   argument: [33mQUERY[m
@@ -29,7 +29,7 @@
   [37m--[no-]watch[m  [34mWatch codes until tpa is stopped[m               
 
 [36mEnvironment Variables[m:
-  [37mCONFIG_FILE[m [33mFILE_PATH[m   [34mPath to the configuration file[m
+  [37mTPA_CONFIG_FILE[m [33mFILE_PATH[m   [34mPath to the configuration file[m
 
 [36mConfiguration Values[m:
   [34mkey paths[m

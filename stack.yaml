@@ -18,7 +18,7 @@ extra-deps:
     - autodocodec-yaml
     - autodocodec-schema
 - github: NorfairKing/opt-env-conf
-  commit: f2d506710f5921fb10de859703e6226139d5d0f2
+  commit: 7f50e94ae1852d7d1ac6adc3eadfc3b4c6829710
   subdirs:
     - opt-env-conf
     - opt-env-conf-test

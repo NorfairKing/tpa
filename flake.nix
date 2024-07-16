@@ -79,6 +79,9 @@
         ] ++ self.checks.${system}.pre-commit.enabledPackages;
         shellHook = self.checks.${system}.pre-commit.shellHook;
       };
-      homeManagerModules.${system}.default = import ./nix/home-manager-module.nix { tpa = self.packages.${system}.static; };
+      homeManagerModules.${system}.default = import ./nix/home-manager-module.nix {
+        tpa = self.packages.${system}.static;
+        opt-env-conf = pkgsMusl.haskellPackages.opt-env-conf;
+      };
     };
 }
