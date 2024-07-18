@@ -33,16 +33,12 @@ in
       settingsCheck = opt-env-conf.mkSettingsCheck
         "tpa-settings-check"
         "${tpa}/bin/tpa"
-        [ "--config-file" "${configFile}" ]
+        [ "--config-file" configFile ]
         { };
-      configuredTpa = tpa.overrideAttrs (old: {
-        checkPhase = (old.checkPhase or "") + ''
-          echo ${settingsCheck}
-        '';
-      });
     in
     mkIf cfg.enable {
       xdg.configFile."tpa/config.yaml".source = "${configFile}";
-      home.packages = [ configuredTpa ];
+      xdg.configFile."tpa/settings-check.txt".source = "${settingsCheck}";
+      home.packages = [ tpa ];
     };
 }
