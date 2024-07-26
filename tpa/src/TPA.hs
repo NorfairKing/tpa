@@ -40,7 +40,7 @@ cli = do
 
       let watch :: IO () -> IO ()
           watch func = do
-            putStr "\x1b[2J\x1b[H"
+            putStr "\x1b[2J\x1b[H" -- Clear screen
             func
             threadDelay 1_000_000
             watch func

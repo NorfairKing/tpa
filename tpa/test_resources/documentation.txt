@@ -20,7 +20,6 @@
   switch: [37m-w[m
   switch: [37m--[no-]watch[m
 
-
 [36mOptions[m:
   [37m--config-file[m [34mPath to the configuration file[m                 
   [33mQUERY[m         [34mQuery for the name of the keys to show[m         

@@ -11,26 +11,33 @@ with lib;
 
 let
   cfg = config.programs.tpa;
+  mergeListRecursively = pkgs.callPackage ./merge-lists-recursively.nix { };
 
 in
 {
   options = {
     programs.tpa = {
       enable = mkEnableOption "Third party authenticator";
-      paths = mkOption ({
-        type = types.listOf types.path;
-        default = [ ];
-        description = "Paths to key files";
-      });
+      config = mkOption {
+        default = { };
+        type = types.submodule {
+          options = (pkgs.callPackage ../tpa/options.nix { });
+        };
+      };
+      extraConfig = mkOption {
+        description = "The contents of the config file, as an attribute set. This will be translated to Yaml and put in the right place along with the rest of the options defined in this submodule.";
+        default = { };
+      };
     };
   };
   config =
     let
-      tpaConfig = {
-        "key-paths" = map builtins.toString cfg.paths;
-      };
+      tpaConfig = mergeListRecursively [
+        (builtins.removeAttrs cfg.config [ "override" "overrideDerivation" ])
+        cfg.extraConfig
+      ];
       configFile = (pkgs.formats.yaml { }).generate "tpa-config.yaml" tpaConfig;
-      settingsCheck = opt-env-conf.mkSettingsCheck
+      settingsCheck = opt-env-conf.makeSettingsCheck
         "tpa-settings-check"
         "${tpa}/bin/tpa"
         [ "--config-file" configFile ]
