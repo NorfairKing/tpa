@@ -21,7 +21,7 @@ in
       config = mkOption {
         default = { };
         type = types.submodule {
-          options = (pkgs.callPackage ../tpa/options.nix { });
+          options = import ../tpa/options.nix { inherit lib; };
         };
       };
       extraConfig = mkOption {
@@ -33,7 +33,7 @@ in
   config =
     let
       tpaConfig = mergeListRecursively [
-        (builtins.removeAttrs cfg.config [ "override" "overrideDerivation" ])
+        cfg.config
         cfg.extraConfig
       ];
       configFile = (pkgs.formats.yaml { }).generate "tpa-config.yaml" tpaConfig;
@@ -44,8 +44,10 @@ in
         { };
     in
     mkIf cfg.enable {
-      xdg.configFile."tpa/config.yaml".source = "${configFile}";
-      xdg.configFile."tpa/settings-check.txt".source = "${settingsCheck}";
+      xdg.configFile = {
+        "tpa/config.yaml".source = configFile;
+        "tpa/settings-check.txt".source = settingsCheck;
+      };
       home.packages = [ tpa ];
     };
 }
