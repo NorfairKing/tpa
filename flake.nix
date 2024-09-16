@@ -43,7 +43,8 @@
     {
       overlays.${system} = import ./nix/overlay.nix;
       packages.${system} = {
-        default = pkgs.tpa;
+        default = self.packages.${system}.dynamic;
+        dynamic = pkgs.tpa;
         static = pkgsMusl.tpa;
       };
       checks.${system} = {
@@ -79,9 +80,16 @@
         ] ++ self.checks.${system}.pre-commit.enabledPackages;
         shellHook = self.checks.${system}.pre-commit.shellHook;
       };
-      homeManagerModules.${system}.default = import ./nix/home-manager-module.nix {
-        tpa = self.packages.${system}.static;
-        opt-env-conf = pkgsMusl.haskellPackages.opt-env-conf;
+      homeManagerModules.${system} = {
+        default = self.homeManagerModules.${system}.dynamic;
+        static = import ./nix/home-manager-module.nix {
+          tpa = self.packages.${system}.static;
+          opt-env-conf = pkgsMusl.haskellPackages.opt-env-conf;
+        };
+        dynamic = import ./nix/home-manager-module.nix {
+          tpa = self.packages.${system}.static;
+          opt-env-conf = pkgsMusl.haskellPackages.opt-env-conf;
+        };
       };
     };
 }
