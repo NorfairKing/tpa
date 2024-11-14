@@ -37,16 +37,10 @@
           (import (opt-env-conf + "/nix/overlay.nix"))
         ];
       };
-      pkgsMusl = pkgs.pkgsMusl;
-
     in
     {
       overlays.${system} = import ./nix/overlay.nix;
-      packages.${system} = {
-        default = self.packages.${system}.dynamic;
-        dynamic = pkgs.tpa;
-        static = pkgsMusl.tpa;
-      };
+      packages.${system}.default = pkgs.tpa;
       checks.${system} = {
         nixos-module-test = import ./nix/nixos-module-test.nix {
           inherit pkgs;
@@ -80,16 +74,9 @@
         ] ++ self.checks.${system}.pre-commit.enabledPackages;
         shellHook = self.checks.${system}.pre-commit.shellHook;
       };
-      homeManagerModules.${system} = {
-        default = self.homeManagerModules.${system}.dynamic;
-        static = import ./nix/home-manager-module.nix {
-          tpa = self.packages.${system}.static;
-          opt-env-conf = pkgsMusl.haskellPackages.opt-env-conf;
-        };
-        dynamic = import ./nix/home-manager-module.nix {
-          tpa = self.packages.${system}.static;
-          opt-env-conf = pkgsMusl.haskellPackages.opt-env-conf;
-        };
+      homeManagerModules.${system}.default = import ./nix/home-manager-module.nix {
+        tpa = self.packages.${system}.default;
+        opt-env-conf = pkgs.haskellPackages.opt-env-conf;
       };
     };
 }
