@@ -27,7 +27,7 @@ pkgs.nixosTest (
       machine.start()
       machine.wait_for_unit("multi-user.target")
 
-      machine.wait_for_unit("home-manager-testuser.service")
+      machine.require_unit_state("home-manager-testuser.service", "inactive")
 
       def su(user, cmd):
           return f"su - {user} -c {quote(cmd)}"
