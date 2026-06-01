@@ -1,5 +1,7 @@
 # TPA
 
+[![NixCI](https://staging.nix-ci.com/badge/gh:NorfairKing:tpa)](https://staging.nix-ci.com/gh:NorfairKing:tpa)
+
 Minimalist declarative command-line Third Party Authenticator 
 
 ## Setting it up
