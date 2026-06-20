@@ -65,9 +65,9 @@ instance HasParser Settings where
                   short 'w'
                 ],
               yesNoSwitch
-                False
                 [ h,
-                  long "watch"
+                  long "watch",
+                  value False
                 ]
             ]
     pure Settings {..}

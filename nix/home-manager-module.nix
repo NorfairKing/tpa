@@ -39,6 +39,7 @@ in
       configFile = (pkgs.formats.yaml { }).generate "tpa-config.yaml" tpaConfig;
       settingsCheck = opt-env-conf.makeSettingsCheck
         "tpa-settings-check"
+        { }
         "${tpa}/bin/tpa"
         [ "--config-file" configFile ]
         { };

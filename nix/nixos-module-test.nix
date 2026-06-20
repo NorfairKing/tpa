@@ -2,7 +2,7 @@
 , home-manager
 , tpa-home-manager-module
 }:
-pkgs.nixosTest (
+pkgs.testers.nixosTest (
   { lib, pkgs, ... }: {
     name = "tpa-module-test";
     nodes.machine = {
@@ -27,7 +27,9 @@ pkgs.nixosTest (
       machine.start()
       machine.wait_for_unit("multi-user.target")
 
-      machine.require_unit_state("home-manager-testuser.service", "inactive")
+      # The activation service is a oneshot with RemainAfterExit, so after a
+      # successful activation it stays "active (exited)" rather than "inactive".
+      machine.require_unit_state("home-manager-testuser.service", "active")
 
       def su(user, cmd):
           return f"su - {user} -c {quote(cmd)}"

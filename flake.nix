@@ -1,8 +1,8 @@
 {
   description = "tpa";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-24.11";
-    home-manager.url = "github:nix-community/home-manager?ref=release-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-26.05";
+    home-manager.url = "github:nix-community/home-manager?ref=release-26.05";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     weeder-nix.url = "github:NorfairKing/weeder-nix";
     weeder-nix.flake = false;

@@ -1,4 +1,4 @@
-resolver: lts-22.39
+resolver: lts-24.38
 packages:
 - tpa
 ghc-options:
@@ -6,20 +6,20 @@ ghc-options:
 
 extra-deps:
 - github: NorfairKing/safe-coloured-text
-  commit: 26b7657428f277f819a0831cbddddb7f4c5408f9
+  commit: 5d1187b7873a8a1e397245c7c0c6d9ab88765d67
   subdirs:
   - safe-coloured-text
   - safe-coloured-text-layout
   - safe-coloured-text-gen
 - github: NorfairKing/autodocodec
-  commit: b435803c3367b06c0d38acd90a54ba63e63fb6be
+  commit: 29b57dc2d425d732ce75143ecf3fc6411df0347b
   subdirs:
     - autodocodec
     - autodocodec-yaml
     - autodocodec-schema
     - autodocodec-nix
 - github: NorfairKing/opt-env-conf
-  commit: ecfcf2a41edad94fd2b7c1d0bdd8654fbcb1545c
+  commit: de7ac850e960c28e5182810515a87fbe1d6daede
   subdirs:
     - opt-env-conf
     - opt-env-conf-test
